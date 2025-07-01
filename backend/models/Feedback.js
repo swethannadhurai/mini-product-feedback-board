@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Comment Schema (defined separately for clarity)
+
 const commentSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -17,7 +17,7 @@ const commentSchema = new mongoose.Schema({
   },
 });
 
-// Main Feedback Schema
+
 const feedbackSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -42,7 +42,7 @@ const feedbackSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  comments: [commentSchema], // nested array of comment objects
+  comments: [commentSchema], 
   createdAt: {
     type: Date,
     default: Date.now,

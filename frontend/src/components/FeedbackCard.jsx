@@ -35,8 +35,8 @@ const FeedbackCard = ({ feedback, onUpvote }) => {
                    const res = await API.patch(`/feedbacks/${feedback._id}/status`, {
                    status: e.target.value,
                  });
-                 // Update the feedback card
-                 onUpvote(res.data); // reuses onUpvote to update card
+                 
+                 onUpvote(res.data); 
                 } catch (err) {
                     console.error('Status update failed', err);
                  }
