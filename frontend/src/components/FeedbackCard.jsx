@@ -5,7 +5,7 @@ import UpvoteButton from './UpvoteButton';
 const FeedbackCard = ({ feedback, onUpvote }) => {
   const handleUpvote = async () => {
     try {
-      const res = await fetch(`https://elegant-dango-a46668.netlify.app/feedbacks/${feedback._id}/upvote`, {
+      const res = await fetch(`https://mini-product-feedback-board.onrender.com/feedbacks/${feedback._id}/upvote`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
     });
