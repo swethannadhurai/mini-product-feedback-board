@@ -25,5 +25,10 @@ mongoose.connect(process.env.MONGO_URI, {
 const feedbackRoutes = require('./routes/feedbackRoutes');
 app.use('/feedbacks', feedbackRoutes);
 
+app.get('/', (req, res) => {
+  res.send('🚀 Mini Product Feedback Board API is running!');
+});
+
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
