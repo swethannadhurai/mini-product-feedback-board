@@ -48,7 +48,7 @@ const Home = () => {
   const handleAddFeedback = () => {
     if (!user) {
       alert('Please login to submit feedback');
-      navigate('/login');
+      navigate('/login?redirect=/submit');
     } else {
       navigate('/submit');
     }
