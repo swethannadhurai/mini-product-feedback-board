@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 
@@ -9,6 +10,8 @@ const feedbackRoutes = require('./routes/feedbackRoutes');
 //connectDB();
 
 const app = express();
+
+app.use(cookieParser());
 app.use(cors({
   origin: 'https://elegant-dango-a46668.netlify.app',
   credentials: true,

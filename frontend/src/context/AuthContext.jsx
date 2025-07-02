@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const res = await fetch("https://mini-product-feedback-board.onrender.com/api/auth/me", {
-          credentials: "include", // send cookies
+          credentials: "include", 
         });
 
         if (res.ok) {
