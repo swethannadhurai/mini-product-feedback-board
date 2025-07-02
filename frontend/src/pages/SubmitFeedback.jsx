@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const SubmitFeedback = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -10,16 +14,13 @@ const SubmitFeedback = () => {
   });
 
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
-  
+  // ✅ Redirect to login if not logged in
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Please login to submit feedback.');
-      navigate('/login');
+    if (!user) {
+      navigate('/login?redirect=/submit');
     }
-  }, [navigate]);
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -98,3 +99,4 @@ const SubmitFeedback = () => {
 };
 
 export default SubmitFeedback;
+
