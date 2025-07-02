@@ -1,6 +1,8 @@
 import React from 'react';
 import StatusBadge from './StatusBadge';
 import UpvoteButton from './UpvoteButton';
+import API from '../services/api';
+
 
 const FeedbackCard = ({ feedback, onUpvote }) => {
   const handleUpvote = async () => {
