@@ -25,8 +25,18 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
+    console.log("Login attempt:", email);
     const user = await User.findOne({ email });
-    if (!user || !(await user.matchPassword(password))) {
+
+    if (!user) {
+      console.log("User not found");
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
+
+    const isMatch = await user.matchPassword(password);
+
+    if (!isMatch) {
+      console.log("Password mismatch");
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
@@ -41,9 +51,11 @@ exports.login = async (req, res) => {
 
     res.status(200).json({ user: { name: user.name, role: user.role, email: user.email } });
   } catch (err) {
+    console.error("Login error:", err);  // Log the real error
     res.status(500).json({ error: 'Server error' });
   }
 };
+
 
 exports.logout = (req, res) => {
   res.clearCookie('token');
