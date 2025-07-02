@@ -57,9 +57,10 @@ const Register = () => {
 
       <p className="mt-4 text-sm">
         Already have an account?{' '}
-        <Link to="/login" className="text-blue-600 underline">
-          Login here
-        </Link>
+                 <Link to={`/login${location.search}`} className="text-blue-600 underline">
+                  Login here
+              </Link>
+
       </p>
     </div>
   );
