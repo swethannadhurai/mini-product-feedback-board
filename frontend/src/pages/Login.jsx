@@ -4,12 +4,13 @@ import { login } from '../services/auth';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-  const { loginUser, user } = useAuth(); // <- also track 'user'
+  const { loginUser, user } = useAuth();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Get redirect path from query string, default to "/"
   const redirectPath = new URLSearchParams(location.search).get('redirect') || '/';
 
   const handleChange = (e) => {
@@ -22,13 +23,13 @@ const Login = () => {
       const res = await login(form);
       loginUser(res.data.user);
       localStorage.setItem('isAdmin', res.data.user.role === 'admin');
-      // ⛔ Don't navigate immediately — wait for useEffect to trigger
+      // Don’t navigate here, let useEffect handle it after loginUser updates the context
     } catch (err) {
       setError('Invalid email or password');
     }
   };
 
-  // ✅ Only navigate AFTER context has updated
+  // Navigate only when login is successful (user is set in context)
   useEffect(() => {
     if (user) {
       navigate(redirectPath);
@@ -62,8 +63,8 @@ const Login = () => {
       </form>
 
       <p className="mt-4 text-sm">
-        Don't have an account?{' '}
-        <Link to="/register" className="text-blue-600 underline">
+        Don&apos;t have an account?{' '}
+        <Link to={`/register${location.search}`} className="text-blue-600 underline">
           Register here
         </Link>
       </p>
@@ -72,4 +73,5 @@ const Login = () => {
 };
 
 export default Login;
+
 
