@@ -5,7 +5,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ add loading state
+  const [loading, setLoading] = useState(true);
 
   const loginUser = (data) => {
     setUser(data);
@@ -20,11 +20,29 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false); // ✅ auth check is complete
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("https://mini-product-feedback-board.onrender.com/api/auth/me", {
+          credentials: "include", // send cookies
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+          localStorage.setItem('user', JSON.stringify(data));
+          localStorage.setItem('isAdmin', data.role === 'admin');
+        } else {
+          logoutUser();
+        }
+      } catch (err) {
+        console.error("Auth check failed:", err);
+        logoutUser();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   return (
@@ -33,5 +51,6 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
 
 
