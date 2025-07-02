@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext'; // ✅
 
 const SubmitFeedback = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -14,10 +11,12 @@ const SubmitFeedback = () => {
   });
 
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { user } = useAuth(); // ✅
 
-  // ✅ Redirect to login if not logged in
   useEffect(() => {
     if (!user) {
+      alert('Please login to submit feedback.');
       navigate('/login?redirect=/submit');
     }
   }, [user, navigate]);
@@ -42,6 +41,9 @@ const SubmitFeedback = () => {
       setError('Something went wrong. Please try again.');
     }
   };
+
+  // ✅ Prevent render if user not ready
+  if (!user) return null;
 
   return (
     <div className="max-w-xl mx-auto p-4">
@@ -99,4 +101,5 @@ const SubmitFeedback = () => {
 };
 
 export default SubmitFeedback;
+
 
