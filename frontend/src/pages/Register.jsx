@@ -10,16 +10,17 @@ const Register = () => {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await register(form);
-      const redirectPath = new URLSearchParams(location.search).get('redirect') || '/login';
-      navigate(redirectPath);
-    } catch (err) {
-      setError('Registration failed. Please try again.');
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await register(form);
+    const redirectPath = new URLSearchParams(location.search).get('redirect') || '/';
+    navigate(`/login?redirect=${redirectPath}`);
+  } catch (err) {
+    setError('Registration failed. Please try again.');
+  }
+};
+
 
   return (
     <div className="max-w-md mx-auto p-6">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../services/api';
-import { useAuth } from '../context/AuthContext'; // ✅
+import { useAuth } from '../context/AuthContext';
 
 const SubmitFeedback = () => {
   const [form, setForm] = useState({
@@ -12,14 +12,15 @@ const SubmitFeedback = () => {
 
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { user } = useAuth(); // ✅
+  const { user, loading } = useAuth(); // ✅ use loading too
 
+  // ✅ Wait for loading to complete before checking user
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       alert('Please login to submit feedback.');
       navigate('/login?redirect=/submit');
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,8 +43,8 @@ const SubmitFeedback = () => {
     }
   };
 
-  // ✅ Prevent render if user not ready
-  if (!user) return null;
+  // ✅ Don't render anything while auth is loading
+  if (loading) return null;
 
   return (
     <div className="max-w-xl mx-auto p-4">
@@ -101,5 +102,6 @@ const SubmitFeedback = () => {
 };
 
 export default SubmitFeedback;
+
 
 
