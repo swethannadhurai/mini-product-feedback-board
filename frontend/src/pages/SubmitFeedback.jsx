@@ -12,7 +12,7 @@ const SubmitFeedback = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // 🔐 Check if user is logged in
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
