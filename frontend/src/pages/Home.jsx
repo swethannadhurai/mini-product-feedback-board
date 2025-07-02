@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import API from '../services/api';
 import FeedbackCard from '../components/FeedbackCard';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -11,19 +12,20 @@ const Home = () => {
   const [filterStatus, setFilterStatus] = useState('All');
   const [sortBy, setSortBy] = useState('Newest');
 
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
         const res = await API.get('/feedbacks');
         setFeedbacks(res.data);
-        console.log("Fetched Feedbacks:", res.data);
       } catch (err) {
         console.error('Failed to fetch feedbacks:', err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchFeedbacks();
   }, []);
 
@@ -35,26 +37,33 @@ const Home = () => {
 
   const filtered = feedbacks
     .filter((fb) =>
-      (filterCategory.toLowerCase() === 'all' || fb.category.toLowerCase() === filterCategory.toLowerCase()) &&
-      (filterStatus.toLowerCase() === 'all' || fb.status.toLowerCase() === filterStatus.toLowerCase())
+      (filterCategory === 'All' || fb.category === filterCategory) &&
+      (filterStatus === 'All' || fb.status === filterStatus)
     )
     .sort((a, b) => {
       if (sortBy === 'Most Upvoted') return b.upvotes - a.upvotes;
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
-  console.log("Filtered Feedbacks:", filtered);
+  const handleAddFeedback = () => {
+    if (!user) {
+      alert('Please login to submit feedback');
+      navigate('/login');
+    } else {
+      navigate('/submit');
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-     
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Product Feedback Board</h1>
-        <Link to="/submit">
-          <button className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
-            + Add Feedback
-          </button>
-        </Link>
+        <button
+          onClick={handleAddFeedback}
+          className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+        >
+          + Add Feedback
+        </button>
       </div>
 
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 mb-6">
@@ -92,7 +101,6 @@ const Home = () => {
         </select>
       </div>
 
-    
       {loading ? (
         <p>Loading feedbacks...</p>
       ) : filtered.length === 0 ? (
@@ -109,4 +117,6 @@ const Home = () => {
 };
 
 export default Home;
+
+
 
