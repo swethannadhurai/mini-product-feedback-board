@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { login } from '../services/auth';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-  const { loginUser } = useAuth();
+  const { loginUser, user } = useAuth(); // <- also track 'user'
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+
+  const redirectPath = new URLSearchParams(location.search).get('redirect') || '/';
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,13 +22,18 @@ const Login = () => {
       const res = await login(form);
       loginUser(res.data.user);
       localStorage.setItem('isAdmin', res.data.user.role === 'admin');
-
-      const redirectPath = new URLSearchParams(location.search).get('redirect') || '/';
-      navigate(redirectPath);
+      // ⛔ Don't navigate immediately — wait for useEffect to trigger
     } catch (err) {
       setError('Invalid email or password');
     }
   };
+
+  // ✅ Only navigate AFTER context has updated
+  useEffect(() => {
+    if (user) {
+      navigate(redirectPath);
+    }
+  }, [user, redirectPath, navigate]);
 
   return (
     <div className="max-w-md mx-auto p-6">
@@ -56,16 +63,13 @@ const Login = () => {
 
       <p className="mt-4 text-sm">
         Don't have an account?{' '}
-       <Link
-            to={`/register${location.search}`}
-           className="text-blue-600 underline"
-          >
-         Register here
-      </Link>
-
+        <Link to="/register" className="text-blue-600 underline">
+          Register here
+        </Link>
       </p>
     </div>
   );
 };
 
 export default Login;
+
