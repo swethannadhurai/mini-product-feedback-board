@@ -10,7 +10,7 @@ const feedbackRoutes = require('./routes/feedbackRoutes');
 
 const app = express();
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://elegant-dango-a46668.netlify.app'],
+  origin: 'https://elegant-dango-a46668.netlify.app',
   credentials: true,
 }));
 app.use(express.json());
