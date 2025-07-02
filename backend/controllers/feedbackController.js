@@ -95,7 +95,7 @@ exports.updateStatus = async (req, res) => {
 exports.addComment = async (req, res) => {
   const { name, message } = req.body;
 
-  // Input validation
+  
   if (!name || !message) {
     return res.status(400).json({ error: 'Name and message are required' });
   }

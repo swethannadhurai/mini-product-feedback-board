@@ -12,9 +12,9 @@ const SubmitFeedback = () => {
 
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { user, loading } = useAuth(); // ✅ use loading too
+  const { user, loading } = useAuth(); 
 
-  // ✅ Wait for loading to complete before checking user
+  
   useEffect(() => {
     if (!loading && !user) {
       alert('Please login to submit feedback.');
@@ -43,7 +43,7 @@ const SubmitFeedback = () => {
     }
   };
 
-  // ✅ Don't render anything while auth is loading
+  
   if (loading) return null;
 
   return (

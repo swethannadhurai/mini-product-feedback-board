@@ -10,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get redirect path from query string, default to "/"
+  
   const redirectPath = new URLSearchParams(location.search).get('redirect') || '/';
 
   const handleChange = (e) => {
@@ -23,13 +23,13 @@ const Login = () => {
       const res = await login(form);
       loginUser(res.data.user);
       localStorage.setItem('isAdmin', res.data.user.role === 'admin');
-      // Don’t navigate here, let useEffect handle it after loginUser updates the context
+      
     } catch (err) {
       setError('Invalid email or password');
     }
   };
 
-  // Navigate only when login is successful (user is set in context)
+  
   useEffect(() => {
     if (user) {
       navigate(redirectPath);
