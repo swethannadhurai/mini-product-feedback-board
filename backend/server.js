@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const authRoutes = require('./routes/authRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 //const connectDB = require('./config/db');
 //connectDB();
@@ -22,8 +24,8 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => console.error(err));
 
 
-const feedbackRoutes = require('./routes/feedbackRoutes');
 app.use('/feedbacks', feedbackRoutes);
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('🚀 Mini Product Feedback Board API is running!');

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import API from '../services/api';
 import FeedbackCard from '../components/FeedbackCard';
 
@@ -46,9 +47,16 @@ const Home = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-4">Product Feedback Board</h1>
+     
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Product Feedback Board</h1>
+        <Link to="/submit">
+          <button className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+            + Add Feedback
+          </button>
+        </Link>
+      </div>
 
-    
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 mb-6">
         <select
           className="border p-2 rounded"
@@ -84,7 +92,7 @@ const Home = () => {
         </select>
       </div>
 
-     
+    
       {loading ? (
         <p>Loading feedbacks...</p>
       ) : filtered.length === 0 ? (
@@ -101,3 +109,4 @@ const Home = () => {
 };
 
 export default Home;
+

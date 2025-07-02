@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import API from '../services/api';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import API from '../services/api';
 
 const SubmitFeedback = () => {
   const [form, setForm] = useState({
@@ -12,6 +12,15 @@ const SubmitFeedback = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // 🔐 Check if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Please login to submit feedback.');
+      navigate('/login');
+    }
+  }, [navigate]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -22,12 +31,14 @@ const SubmitFeedback = () => {
       setError('All fields are required');
       return;
     }
+
     try {
       await API.post('/feedbacks', form);
-      navigate('/'); 
+      alert('Feedback submitted successfully!');
+      navigate('/');
     } catch (err) {
       console.error('Submit failed:', err);
-      setError('Something went wrong. Try again.');
+      setError('Something went wrong. Please try again.');
     }
   };
 
