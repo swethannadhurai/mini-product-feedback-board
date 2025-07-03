@@ -14,7 +14,9 @@ router.get('/', getAllFeedbacks);
 router.get('/:id', getFeedbackById);
 router.post('/', createFeedback);
 router.patch('/:id/upvote', upvoteFeedback);
+
 router.post('/:id/comments', addComment);
+
 router.patch('/:id/status', protect, adminOnly, updateStatus);
 
 

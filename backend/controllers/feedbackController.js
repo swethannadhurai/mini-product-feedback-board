@@ -1,6 +1,6 @@
 const Feedback = require('../models/Feedback');
 
-// GET /feedbacks - Get all feedbacks
+
 exports.getAllFeedbacks = async (req, res) => {
   try {
     const feedbacks = await Feedback.find().sort({ createdAt: -1 });
@@ -11,7 +11,7 @@ exports.getAllFeedbacks = async (req, res) => {
   }
 };
 
-// GET /feedbacks/:id - Get single feedback by ID
+
 exports.getFeedbackById = async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id);
@@ -25,7 +25,7 @@ exports.getFeedbackById = async (req, res) => {
   }
 };
 
-// POST /feedbacks - Create new feedback
+
 exports.createFeedback = async (req, res) => {
   try {
     const { title, description, category } = req.body;
@@ -47,7 +47,7 @@ exports.createFeedback = async (req, res) => {
   }
 };
 
-// PATCH /feedbacks/:id/upvote - Increment upvotes
+
 exports.upvoteFeedback = async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id);
@@ -64,7 +64,7 @@ exports.upvoteFeedback = async (req, res) => {
   }
 };
 
-// PATCH /feedbacks/:id/status - Update status
+
 exports.updateStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -91,7 +91,7 @@ exports.updateStatus = async (req, res) => {
   }
 };
 
-// POST /feedbacks/:id/comments - Add a comment
+
 exports.addComment = async (req, res) => {
   const { name, message } = req.body;
 
@@ -101,17 +101,17 @@ exports.addComment = async (req, res) => {
   }
 
   try {
-    // Find the feedback by ID
+
     const feedback = await Feedback.findById(req.params.id);
     if (!feedback) {
       return res.status(404).json({ error: 'Feedback not found' });
     }
 
-    // Push new comment to the array
+    
     feedback.comments.push({ name, message });
     await feedback.save();
 
-    // Respond with updated feedback
+    
     res.status(201).json(feedback);
   } catch (err) {
     console.error('Add comment error:', err.message);
